@@ -3,9 +3,6 @@ package com.bakery.model;
 public class Admin extends User {
 
     private String role;
-    private List<Product> products = new ArrayList<>();
-    private List<Category> categories = new ArrayList<>();
-    private List<Order> orders = new ArrayList<>();
 
     // Constructors
     public Admin() {
@@ -26,49 +23,27 @@ public class Admin extends User {
         this.role = role;
     }
 
-    // Methods implementation
+    // Methods from UML
     public void addProduct(Product product) {
-        if (product != null) {
-            products.add(product);
-            System.out.println("Product added successfully: " + product.getName());
-        } else {
-            System.out.println("Failed to add product: Product cannot be null");
-        }
+        // Implementation would depend on how products are stored
+        // This could involve a call to a ProductService or ProductRepository
+        
     }
 
     public void updateProduct(int productId, Product newDetails) {
-        for (int i = 0; i < products.size(); i++) {
-            if (products.get(i).getId() == productId) {
-                products.set(i, newDetails);
-                System.out.println("Product updated successfully");
-                return;
-            }
-        }
-        System.out.println("Product not found with ID: " + productId);
+        // Implementation would depend on how products are stored and updated
     }
 
     public void deleteProduct(int productId) {
-        products.removeIf(product -> product.getId() == productId);
-        System.out.println("Product deleted with ID: " + productId);
+        // Implementation would depend on how products are deleted
     }
 
     public void addCategory(Category category) {
-        if (category != null) {
-            categories.add(category);
-            System.out.println("Category added successfully: " + category.getName());
-        } else {
-            System.out.println("Failed to add category: Category cannot be null");
-        }
+        // Implementation would depend on how categories are stored
     }
 
     public void updateOrderStatus(int orderId, String newStatus) {
-        for (Order order : orders) {
-            if (order.getId() == orderId) {
-                order.setStatus(newStatus);
-                System.out.println("Order status updated to: " + newStatus);
-                return;
-            }
-        }
-        System.out.println("Order not found with ID: " + orderId);
+        // Implementation would depend on how orders are managed
     }
 }
+cek 1
