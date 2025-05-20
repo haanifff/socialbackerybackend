@@ -46,9 +46,3 @@ public class Admin extends User {
     }
 }
 
-//anjing lu
-<<<<<<< HEAD
-halohalo abdlul
-=======
-// hakim gantengSgott
->>>>>>> d524f661e54e05c046ff60c9c10741ec5254657b
