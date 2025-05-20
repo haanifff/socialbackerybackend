@@ -46,3 +46,14 @@ public class Admin extends User {
     }
 }
 cek 1
+
+// Note: The methods above are placeholders and would need to be implemented
+// according to the specific requirements of the application.
+// The actual implementation would involve database operations or service calls
+// to manage products, categories, and orders.
+// The methods would typically interact with a service layer that handles
+
+
+
+
+// the business logic and data access.
