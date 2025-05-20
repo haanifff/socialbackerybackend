@@ -77,5 +77,11 @@ public class Review {
     public void deleteReview() {
         // This would typically call a method in a service or repository
         // to remove the review from the database
+        // Set all fields to null or default values to indicate deletion
+        this.id = 0;
+        this.productId = 0;
+        this.userId = 0;
+        this.rating = 0;
+        this.comment = null;
     }
 }
