@@ -1,27 +1,24 @@
 package com.bakery.model;
 
-// Abstract class for bakery items
 public abstract class Item {
-    private int id;
-    private String name;
-    private double price;
+    protected Long id;
     
-    // Constructors
     public Item() {
     }
     
-    public Item(int id, String name, double price) {
+    public Item(Long id, String name, String description, double price, String imageUrl) {
         this.id = id;
         this.name = name;
+        this.description = description;
         this.price = price;
+        this.imageUrl = imageUrl;
     }
     
-    // Getters and setters
-    public int getId() {
+    public Long getId() {
         return id;
     }
     
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
     
@@ -33,6 +30,14 @@ public abstract class Item {
         this.name = name;
     }
     
+    public String getDescription() {
+        return description;
+    }
+    
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    
     public double getPrice() {
         return price;
     }
@@ -41,20 +46,18 @@ public abstract class Item {
         this.price = price;
     }
     
-    // Methods from UML
-    public int getId() {
-        return this.id;
+    public String getImageUrl() {
+        return imageUrl;
     }
     
-    public void updatePrice(float newPrice) {
-        this.price = newPrice;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
-    
-    public String getDetails() {
-        return "Item ID: " + id + ", Name: " + name + ", Price: " + price;
-    }
-    
-    public void setDescription(String desc) {
-        // To be implemented by subclasses
-    }
+    protected String name;
+    protected String description;
+    protected double price;
+    protected String imageUrl;
+
+    // Getters and setters
 }
+
