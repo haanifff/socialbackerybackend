@@ -1,67 +1,42 @@
-package com.bakery.controller;
-
-import com.bakery.model.Order;
-import com.bakery.dto.OrderRequest;
-import com.bakery.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import java.util.ArrayList;
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/orders")
+package com.bakery.controller;
+
+
 public class OrderController {
-    
-    @Autowired
-    private OrderService orderService;
+    private List<Order> orders;
 
-    @PostMapping
-    public ResponseEntity<?> createOrder(@RequestBody OrderRequest orderRequest) {
-        try {
-            Order createdOrder = orderService.createOrder(orderRequest);
-            return ResponseEntity.ok(createdOrder);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public OrderController() {
+        this.orders = new ArrayList<>();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getOrder(@PathVariable Long id) {
-        try {
-            Order order = orderService.getOrderById(id);
-            return ResponseEntity.ok(order);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+    public void createOrder(Order order) {
+        orders.add(order);
     }
 
-    @GetMapping
-    public ResponseEntity<?> getAllOrders() {
-        try {
-            List<Order> orders = orderService.getAllOrders();
-            return ResponseEntity.ok(orders);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public Order getOrder(int orderId) {
+        return orders.stream()
+                .filter(order -> order.getId() == orderId)
+                .findFirst()
+                .orElse(null);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateOrder(@PathVariable Long id, @RequestBody OrderRequest orderRequest) {
-        try {
-            Order updatedOrder = orderService.updateOrder(id, orderRequest);
-            return ResponseEntity.ok(updatedOrder);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public List<Order> getAllOrders() {
+        return new ArrayList<>(orders);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteOrder(@PathVariable Long id) {
-        try {
-            orderService.deleteOrder(id);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+    public boolean updateOrder(int orderId, Order updatedOrder) {
+        for (int i = 0; i < orders.size(); i++) {
+            if (orders.get(i).getId() == orderId) {
+                orders.set(i, updatedOrder);
+                return true;
+            }
         }
+        return false;
+    }
+
+    public boolean deleteOrder(int orderId) {
+        return orders.removeIf(order -> order.getId() == orderId);
     }
 }
