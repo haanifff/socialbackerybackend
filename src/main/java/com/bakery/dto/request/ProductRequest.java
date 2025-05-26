@@ -1,9 +1,9 @@
+package com.bakery.dto.request;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-package com.bakery.dto.request;
 
 
 @Data

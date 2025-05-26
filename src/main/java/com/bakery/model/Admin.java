@@ -1,5 +1,10 @@
 package com.bakery.model;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import com.bakery.repository.ProductRepository;
+import com.bakery.repository.CategoryRepository;
+import com.bakery.repository.OrderRepository;
+
 public class Admin extends User {
 
     private String role;
@@ -19,31 +24,52 @@ public class Admin extends User {
         return role;
     }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
+    private ProductRepository productRepository;
+    private CategoryRepository categoryRepository;
+    private OrderRepository orderRepository;
 
-    // Methods from UML
     public void addProduct(Product product) {
-        // Implementation would depend on how products are stored
-        // This could involve a call to a ProductService or ProductRepository
-        
+        if (product == null) {
+            throw new IllegalArgumentException("Product cannot be null");
+        }
+        productRepository.save(product);
     }
 
     public void updateProduct(int productId, Product newDetails) {
-        // Implementation would depend on how products are stored and updated
+        if (newDetails == null) {
+            throw new IllegalArgumentException("New product details cannot be null");
+        }
+        Product existingProduct = productRepository.findById(productId)
+            .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        
+        existingProduct.setName(newDetails.getName());
+        existingProduct.setPrice(newDetails.getPrice());
+        existingProduct.setDescription(newDetails.getDescription());
+        productRepository.save(existingProduct);
     }
 
     public void deleteProduct(int productId) {
-        // Implementation would depend on how products are deleted
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        productRepository.delete(product);
     }
 
     public void addCategory(Category category) {
-        // Implementation would depend on how categories are stored
+        if (category == null) {
+            throw new IllegalArgumentException("Category cannot be null");
+        }
+        categoryRepository.save(category);
     }
 
-    public void updateOrderStatus(int orderId, String newStatus) {
-        // Implementation would depend on how orders are managed
+        public void updateOrderStatus(int orderId, String newStatus) {
+            if (newStatus == null || newStatus.trim().isEmpty()) {
+                throw new IllegalArgumentException("New status cannot be null or empty");
+            }
+            Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+            order.setStatus(newStatus);
+            orderRepository.save(order);
+        }
     }
-}
-cek 1
+
+    
