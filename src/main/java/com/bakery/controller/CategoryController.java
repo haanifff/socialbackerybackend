@@ -1,50 +1,43 @@
+package com.bakery.service;
+
 import com.bakery.model.Category;
-import com.bakery.service.CategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import com.bakery.repository.CategoryRepository;
+import com.bakery.exception.CategoryNotFoundException;
+
 import java.util.List;
 
-package com.bakery.controller;
+public class CategoryService {
 
+    private final CategoryRepository repository;
 
+    public CategoryService() {
+        this.repository = new CategoryRepository();
+    }
 
-@RestController
-@RequestMapping("/api/categories")
-public class CategoryController {
-
-    @Autowired
-    private CategoryService categoryService;
-
-    @GetMapping
     public List<Category> getAllCategories() {
-        return categoryService.getAllCategories();
+        return repository.findAll();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
-        return categoryService.getCategoryById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public Category getCategoryById(int id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new CategoryNotFoundException("Kategori dengan ID " + id + " tidak ditemukan"));
     }
 
-    @PostMapping
-    public Category createCategory(@RequestBody Category category) {
-        return categoryService.saveCategory(category);
+    public Category createCategory(String name) {
+        Category category = new Category(0, name);
+        return repository.save(category);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category category) {
-        return categoryService.updateCategory(id, category)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public Category updateCategory(int id, String newName) {
+        Category category = getCategoryById(id);
+        category.setName(newName);
+        return repository.save(category);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        if (categoryService.deleteCategory(id)) {
-            return ResponseEntity.ok().build();
+    public void deleteCategory(int id) {
+        if (!repository.existsById(id)) {
+            throw new CategoryNotFoundException("Kategori ID " + id + " tidak ditemukan untuk dihapus");
         }
-        return ResponseEntity.notFound().build();
+        repository.deleteById(id);
     }
 }
