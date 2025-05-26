@@ -1,50 +1,67 @@
+package com.bakery.controller;
+
 import com.bakery.model.Order;
+import com.bakery.dto.OrderRequest;
 import com.bakery.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-package com.bakery.controller;
-
-
-
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
-
+    
     @Autowired
     private OrderService orderService;
 
-    @GetMapping
-    public List<Order> getAllOrders() {
-        return orderService.getAllOrders();
+    @PostMapping
+    public ResponseEntity<?> createOrder(@RequestBody OrderRequest orderRequest) {
+        try {
+            Order createdOrder = orderService.createOrder(orderRequest);
+            return ResponseEntity.ok(createdOrder);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
-        return orderService.getOrderById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> getOrder(@PathVariable Long id) {
+        try {
+            Order order = orderService.getOrderById(id);
+            return ResponseEntity.ok(order);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @PostMapping
-    public Order createOrder(@RequestBody Order order) {
-        return orderService.createOrder(order);
+    @GetMapping
+    public ResponseEntity<?> getAllOrders() {
+        try {
+            List<Order> orders = orderService.getAllOrders();
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody Order order) {
-        return orderService.updateOrder(id, order)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> updateOrder(@PathVariable Long id, @RequestBody OrderRequest orderRequest) {
+        try {
+            Order updatedOrder = orderService.updateOrder(id, orderRequest);
+            return ResponseEntity.ok(updatedOrder);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
-        if (orderService.deleteOrder(id)) {
+    public ResponseEntity<?> deleteOrder(@PathVariable Long id) {
+        try {
+            orderService.deleteOrder(id);
             return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return ResponseEntity.notFound().build();
     }
 }
