@@ -1,78 +1,52 @@
 package com.bakery.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.*;
+import java.util.Set;
 
+@Entity
+@Table(name = "categories")
 public class Category {
-    private int id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true)
     private String name;
-    private String description;
-    private List<Product> products;
-    
-    // Constructors
+
+    // Relasi dengan produk (opsional, jika diperlukan)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    private Set<Product> products;
+
     public Category() {
-        this.products = new ArrayList<>();
     }
-    
-    public Category(int id, String name, String description) {
-        this.id = id;
+
+    public Category(String name) {
         this.name = name;
-        this.description = description;
-        this.products = new ArrayList<>();
     }
-    
-    // Getters and setters
-    public int getId() {
+
+    // Getter dan Setter
+    public Long getId() {
         return id;
     }
-    
-    public void setId(int id) {
+
+    public void setId(Long id) {
         this.id = id;
     }
-    
+
     public String getName() {
         return name;
     }
-    
+
     public void setName(String name) {
         this.name = name;
     }
-    
-    public String getDescription() {
-        return description;
-    }
-    
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    
-    public List<Product> getProducts() {
+
+    public Set<Product> getProducts() {
         return products;
     }
-    
-    public void setProducts(List<Product> products) {
+
+    public void setProducts(Set<Product> products) {
         this.products = products;
-    }
-    
-    // Methods from UML
-    public void addProduct(Product product) {
-        this.products.add(product);
-        product.setCategory(this);
-    }
-    
-    public void removeProduct(Product product) {
-        this.products.remove(product);
-    }
-    
-    public List<Product> getProducts() {
-        return this.products;
-    }
-    
-    public String getCategoryName() {
-        return this.name;
-    }
-    
-    public void updateCategoryName(String newName) {
-        this.name = newName;
     }
 }
