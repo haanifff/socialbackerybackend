@@ -1,144 +1,85 @@
 package com.bakery.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Order {
-    private int id;
-    private double totalPrice;
+    private Long id;
+    private String customerName;
+    private List<String> items;
+    private double totalAmount;
+    private LocalDateTime orderDate;
     private String status;
-    private int userId;
-    private List<Product> products;
-    private int[] quantities; // To store quantity for each product
-    
-    // Constructors
+
     public Order() {
-        this.products = new ArrayList<>();
+        this.items = new ArrayList<>();
+        this.orderDate = LocalDateTime.now();
+        this.status = "PENDING";
     }
-    
-    public Order(int id, int userId, String status) {
+
+    public Order(Long id, String customerName) {
+        this();
         this.id = id;
-        this.userId = userId;
-        this.status = status;
-        this.totalPrice = 0.0;
-        this.products = new ArrayList<>();
+        this.customerName = customerName;
     }
-    
-    // Getters and setters
-    public int getId() {
+
+    // Getters and Setters
+    public Long getId() {
         return id;
     }
-    
-    public void setId(int id) {
+
+    public void setId(Long id) {
         this.id = id;
     }
-    
-    public double getTotalPrice() {
-        return totalPrice;
+
+    public String getCustomerName() {
+        return customerName;
     }
-    
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
-    
+
+    public List<String> getItems() {
+        return items;
+    }
+
+    public void setItems(List<String> items) {
+        this.items = items;
+    }
+
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public LocalDateTime getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(LocalDateTime orderDate) {
+        this.orderDate = orderDate;
+    }
+
     public String getStatus() {
         return status;
     }
-    
+
     public void setStatus(String status) {
         this.status = status;
     }
-    
-    public int getUserId() {
-        return userId;
+
+    // Helper methods
+    public void addItem(String item) {
+        this.items.add(item);
     }
-    
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-    
-    public List<Product> getProducts() {
-        return products;
-    }
-    
-    public void setProducts(List<Product> products) {
-        this.products = products;
-        calculateTotalPrice();
-    }
-    
-    // Methods from UML
-    public void addProduct(Product product, int quantity) {
-        // Add product to order
-        this.products.add(product);
-        
-        // Update quantity (in a real application, this would be more sophisticated)
-        // This is a simplified approach for demonstration
-        int currentSize = this.products.size();
-        int[] newQuantities = new int[currentSize];
-        if (quantities != null) {
-            System.arraycopy(quantities, 0, newQuantities, 0, quantities.length);
-        }
-        newQuantities[currentSize - 1] = quantity;
-        this.quantities = newQuantities;
-        
-        // Update price
-        calculateTotalPrice();
-    }
-    
-    public void removeProduct(int productId) {
-        for (int i = 0; i < products.size(); i++) {
-            if (products.get(i).getId() == productId) {
-                products.remove(i);
-                
-                // Update quantities array
-                int[] newQuantities = new int[products.size()];
-                int newIndex = 0;
-                for (int j = 0; j < quantities.length; j++) {
-                    if (j != i) {
-                        newQuantities[newIndex++] = quantities[j];
-                    }
-                }
-                quantities = newQuantities;
-                
-                // Recalculate total price
-                calculateTotalPrice();
-                break;
-            }
-        }
-    }
-    
-    public float calculateTotalPrice() {
-        totalPrice = 0.0;
-        for (int i = 0; i < products.size(); i++) {
-            totalPrice += products.get(i).getPrice() * (quantities != null ? quantities[i] : 1);
-        }
-        return (float)totalPrice;
-    }
-    
-    public String getOrderStatus() {
-        return this.status;
-    }
-    
-    public void updateStatus(String newStatus) {
-        this.status = newStatus;
-    }
-    
-    public String getOrderDetails() {
-        StringBuilder details = new StringBuilder();
-        details.append("Order ID: ").append(id)
-               .append(", Status: ").append(status)
-               .append(", Total Price: $").append(String.format("%.2f", totalPrice))
-               .append("\nProducts:\n");
-        
-        for (int i = 0; i < products.size(); i++) {
-            Product product = products.get(i);
-            int quantity = quantities != null && i < quantities.length ? quantities[i] : 1;
-            details.append("  - ").append(product.getName())
-                   .append(" (Qty: ").append(quantity)
-                   .append(") @ $").append(String.format("%.2f", product.getPrice()))
-                   .append(" each\n");
-        }
-        
-        return details.toString();
+
+    public void removeItem(String item) {
+        this.items.remove(item);
     }
 }
